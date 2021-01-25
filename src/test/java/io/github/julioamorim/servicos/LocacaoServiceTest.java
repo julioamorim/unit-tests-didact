@@ -4,7 +4,9 @@ import io.github.julioamorim.wcaquino.entidades.Filme;
 import io.github.julioamorim.wcaquino.entidades.Locacao;
 import io.github.julioamorim.wcaquino.entidades.Usuario;
 import io.github.julioamorim.wcaquino.utils.DataUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.util.Date;
 
@@ -15,8 +17,12 @@ import static org.junit.Assert.assertTrue;
 
 public class LocacaoServiceTest {
 
+    @Rule
+    public ErrorCollector erro = new ErrorCollector();
+
     @Test
     public void verifica_filme_alugado() {
+
         // definiçao de de cenario pra testes
 
         LocacaoService service = new LocacaoService();
@@ -42,5 +48,9 @@ public class LocacaoServiceTest {
 
         assertThat(DataUtils.isMesmaData(filmeAlugado.getDataLocacao(), new Date()), is(true));
         assertThat(DataUtils.isMesmaData(filmeAlugado.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
+
+        //With rules and checkThat, is possible view erros individually
+        erro.checkThat(DataUtils.isMesmaData(filmeAlugado.getDataLocacao(), new Date()), is(true));
+        erro.checkThat(DataUtils.isMesmaData(filmeAlugado.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
     }
 }
